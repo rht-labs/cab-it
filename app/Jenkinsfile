@@ -6,8 +6,8 @@ pipeline {
 
     environment {
         // Global Vars
-        PIPELINES_NAMESPACE = "labs-ci-cd"
-        APP_NAME = "flask"
+        PIPELINES_NAMESPACE = "cab-it-ci-cd"
+        APP_NAME = "python-app"
 
         JENKINS_TAG = "${JOB_NAME}.${BUILD_NUMBER}".replace("/", "-")
         JOB_NAME = "${JOB_NAME}".replace("/", "-")
@@ -34,7 +34,7 @@ pipeline {
             }
             steps {
                 script {
-                    env.PROJECT_NAMESPACE = "flask-test"
+                    env.PROJECT_NAMESPACE = "cab-it-test"
                     env.FLASK_ENV = "test"
                 }
             }
@@ -50,7 +50,7 @@ pipeline {
             }
             steps {
                 script {
-                    env.PROJECT_NAMESPACE = "flask-dev"
+                    env.PROJECT_NAMESPACE = "cab-it-dev"
                     env.FLASK_ENV = "dev"
                 }
             }
@@ -62,13 +62,16 @@ pipeline {
                 }
             }
             steps {
-                sh 'python --version'
-                //sh 'python -m virtualenv env'
-                //sh 'source env/bin/activate'
-                sh 'pip install -r requirements.txt --user'
-                sh 'pytest --junitxml=test-report.xml'
-                sh 'zip -r package-contents.zip .'
-                sh 'curl -vvv -u admin:admin123 --upload-file package-contents.zip http://${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/repository/zip/com/redhat/${APP_NAME}/${JOB_NAME}.${BUILD_NUMBER}/package-contents.zip'
+                sh '''
+                    python --version
+                    python -m virtualenv env
+                    source env/bin/activate
+                    pip install -r requirements.txt --user
+                    pytest --junitxml=test-report.xml
+                    oc start-build ${APP_NAME} --from-dir=. --follow
+                    zip -r package-contents.zip .
+                    curl -vvv -u admin:admin123 --upload-file package-contents.zip http://${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/repository/zip/com/redhat/${APP_NAME}/${JOB_NAME}.${BUILD_NUMBER}/package-contents.zip
+                '''
             }
             post {
                 always {

@@ -2,6 +2,12 @@
 ---
 ansible_connection: local
 
+fabric8_dev:
+  APP_NAMESPACE: "{{ dev.NAMESPACE }}"
+
+fabric8_test:
+  APP_NAMESPACE: "{{ test.NAMESPACE }}"
+
 deploy:
   PIPELINES_NAMESPACE: "{{ ci_cd.NAMESPACE }}"
   NAME: java-app
@@ -18,7 +24,7 @@ openshift_cluster_content:
 - object: app-deploy-dev
   content:
   - name: python-app
-    template: "{{ playbook_dir }}/openshift-templates/automation-api-hsql/template.yml"
+    template: "{{ playbook_dir }}/openshift-templates/http-app-deploy/template.yml"
     params_from_vars: "{{ deploy }}"
     namespace: "{{ dev.NAMESPACE }}"
     tags:
@@ -26,7 +32,7 @@ openshift_cluster_content:
     - python-deploy-dev
   - name: fabric8-rolebinding
     template: "{{ playbook_dir }}/openshift-templates/fabric8-role-bindings/template.yml"
-    params: "{{ playbook_dir }}/params/python-app/fabric8_dev"
+    params_from_vars: "{{ fabric8_dev }}"
     namespace: "{{ dev.NAMESPACE }}"
     tags:
     - python-deploy
@@ -34,7 +40,7 @@ openshift_cluster_content:
 - object: app-deploy-test
   content:
   - name: python-app
-    template: "{{ playbook_dir }}/openshift-templates/automation-api-hsql/template.yml"
+    template: "{{ playbook_dir }}/openshift-templates/http-app-deploy/template.yml"
     params_from_vars: "{{ deploy }}"
     namespace: "{{ test.NAMESPACE }}"
     tags:
@@ -42,7 +48,7 @@ openshift_cluster_content:
     - python-deploy-test
   - name: fabric8-rolebinding
     template: "{{ playbook_dir }}/openshift-templates/fabric8-role-bindings/template.yml"
-    params: "{{ playbook_dir }}/params/python-app/fabric8_test"
+    params_from_vars: "{{ fabric8_test }}"
     namespace: "{{ test.NAMESPACE }}"
     tags:
     - python-deploy
