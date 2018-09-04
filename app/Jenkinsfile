@@ -7,13 +7,21 @@ pipeline {
     environment {
         // Global Vars
         PIPELINES_NAMESPACE = "cab-it-ci-cd"
+        DEV_PROJECT = "cab-it-dev"
+        TEST_PROJECT = "cab-it-test"
         APP_NAME = "python-app"
-
         JENKINS_TAG = "${JOB_NAME}.${BUILD_NUMBER}".replace("/", "-")
         JOB_NAME = "${JOB_NAME}".replace("/", "-")
         NEXUS_SERVICE_HOST = 'nexus'
         NEXUS_SERVICE_PORT = '8081'
+        SOURCE_CONTEXT_DIR = ""
+        BUILD_OUTPUT_CONTEXT_DIR = "dist/"
+        APP_NAME = "vue-booster"
+        OCP_API_SERVER = "${OPENSHIFT_API_URL}"
+        OCP_TOKEN = readFile('/var/run/secrets/kubernetes.io/serviceaccount/token').trim()
     }
+
+
 
     options {
         buildDiscarder(logRotator(numToKeepStr:'10'))
@@ -23,38 +31,6 @@ pipeline {
     }
 
     stages {
-        stage("prepare environment for master deploy") {
-            agent {
-                node {
-                    label "master"
-                }
-            }
-            when {
-              expression { GIT_BRANCH ==~ /(.*master)/ }
-            }
-            steps {
-                script {
-                    env.PROJECT_NAMESPACE = "cab-it-test"
-                    env.FLASK_ENV = "test"
-                }
-            }
-        }
-        stage("prepare environment for develop deploy") {
-            agent {
-                node {
-                    label "master"
-                }
-            }
-            when {
-              expression { GIT_BRANCH ==~ /(.*develop)/ }
-            }
-            steps {
-                script {
-                    env.PROJECT_NAMESPACE = "cab-it-dev"
-                    env.FLASK_ENV = "dev"
-                }
-            }
-        }
         stage("test and build") {
             agent {
                 node {
@@ -127,23 +103,20 @@ pipeline {
                     label "master"  
                 }
             }
-            when {
-                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
-            }
             steps {
                 echo '### tag image for namespace ###'
                 sh  '''
-                    oc project ${PROJECT_NAMESPACE}
-                    oc tag ${PIPELINES_NAMESPACE}/${APP_NAME}:${JENKINS_TAG} ${PROJECT_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}
+                    oc project ${DEV_NAMESPACE}
+                    oc tag ${PIPELINES_NAMESPACE}/${APP_NAME}:${JENKINS_TAG} ${DEV_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}
                     '''
                 echo '### set env vars and image for deployment ###'
                 sh '''
-                    oc set image dc/${APP_NAME} ${APP_NAME}=docker-registry.default.svc:5000/${PROJECT_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}
+                    oc set image dc/${APP_NAME} ${APP_NAME}=docker-registry.default.svc:5000/${DEV_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}
                     oc rollout latest dc/${APP_NAME}
                 '''
                 echo '### Verify OCP Deployment ###'
                 openshiftVerifyDeployment depCfg: env.APP_NAME, 
-                    namespace: env.PROJECT_NAMESPACE, 
+                    namespace: env.DEV_NAMESPACE, 
                     replicaCount: '1', 
                     verbose: 'false', 
                     verifyReplicaCount: 'true', 
