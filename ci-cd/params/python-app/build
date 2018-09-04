@@ -1,4 +1,5 @@
 PIPELINE_SOURCE_REPOSITORY_URL=https://github.com/rht-labs/cab-it
-PIPELINE_SOURCE_REPOSITORY_REF=flask-skeleton
+PIPELINE_SOURCE_REPOSITORY_REF=master
+PIPELINE_CONTEXT_DIR=app
 NAME=python-app
-S2I_BASE_IMAGE=redhat-openjdk18-openshift:1.2
+S2I_BASE_IMAGE=registry.access.redhat.com/rhscl/python-36-rhel7:latest
