@@ -1,17 +1,15 @@
 ci_cd:
   NAMESPACE: cab-it-ci-cd
-  NAMESPACE_DISPLAY_NAME: Labs CI/CD
+  NAMESPACE_DISPLAY_NAME: "CI/CD"
   
 dev:
   NAMESPACE: cab-it-dev
-  NAMESPACE_DISPLAY_NAME: Labs Development
+  NAMESPACE_DISPLAY_NAME: "Cab-It-Development"
 
 test:
   NAMESPACE: cab-it-test
-  NAMESPACE_DISPLAY_NAME: Labs Test 
+  NAMESPACE_DISPLAY_NAME: "Cab-It-Test"
 
 role_binding_group:
   GROUP: "{{ ci_cd.NAMESPACE }}-contributors"
   ROLE: edit
-
-app:

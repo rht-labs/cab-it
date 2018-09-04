@@ -1,6 +1,6 @@
 ci-cd/openshift-applier
 ci-cd/roles/*
-ci-cd/!roles/configure-nexus
+!ci-cd/roles/configure-nexus
 ci-cd/*.pyc
 .idea
 *.iml
