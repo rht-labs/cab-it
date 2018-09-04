@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block content %}
+    <h3>The counter has been {{ change_type }} by {{ amount }} and is now at {{ counter }}!</h3>
+    You will be taken back to the homepage in 3 seconds.
+    <script src="{{ url_for('static', filename='scripts/return_to_home.js') }}"></script>
+{% endblock %}

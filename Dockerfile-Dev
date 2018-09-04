@@ -1,0 +1,11 @@
+FROM python:3.6
+
+LABEL maintainer "Jacob See <jasee@redhat.com>"
+
+COPY requirements.txt /requirements.txt
+
+RUN pip install --no-cache-dir -r requirements.txt && rm requirements.txt
+
+CMD ["flask", "run", "--host=0.0.0.0"]
+
+EXPOSE 5000
