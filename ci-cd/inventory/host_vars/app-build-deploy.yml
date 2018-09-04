@@ -10,7 +10,7 @@ fabric8_test:
 
 deploy:
   PIPELINES_NAMESPACE: "{{ ci_cd.NAMESPACE }}"
-  NAME: java-app
+  NAME: python-app
 
 openshift_cluster_content:
 - object: app-builds

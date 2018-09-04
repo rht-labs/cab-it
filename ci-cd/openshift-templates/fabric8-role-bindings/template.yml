@@ -2,7 +2,7 @@
 kind: Template
 apiVersion: v1
 metadata:
-  name: java-app-deploy
+  name: app-deploy
   annotations:
     openshift.io/display-name: Fabric8 Deploy Rolebinding
     description: A template to support the role bindings needed fabric8 k8s libraries

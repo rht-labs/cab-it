@@ -47,7 +47,6 @@ pipeline {
                     source env/bin/activate
                     pip install -r requirements.txt
                     pytest --junitxml=test-report.xml
-                    oc start-build ${APP_NAME} --from-dir=. --follow
                     zip -r package-contents.zip .
                     curl -vvv -u admin:admin123 --upload-file package-contents.zip http://${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/repository/zip/com/redhat/${APP_NAME}/${JOB_NAME}.${BUILD_NUMBER}/package-contents.zip
                 '''
@@ -88,7 +87,7 @@ pipeline {
                 sh  '''
                         oc project ${PIPELINES_NAMESPACE} # probs not needed
                         oc patch bc ${APP_NAME} -p "{\\"spec\\":{\\"output\\":{\\"to\\":{\\"kind\\":\\"ImageStreamTag\\",\\"name\\":\\"${APP_NAME}:${JENKINS_TAG}\\"}}}}"
-                        oc start-build ${APP_NAME} --from-dir=package-contents/ --follow
+                        oc start-build ${APP_NAME} --w
                     '''
             }
             post {
