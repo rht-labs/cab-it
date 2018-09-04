@@ -5,4 +5,4 @@
 
 # From 'rht-labs/labs-ci-cd'
 - src: https://github.com/rht-labs/cab-it
-  version: ci-cd-seed
+  version: master
