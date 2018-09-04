@@ -1,0 +1,49 @@
+
+---
+ansible_connection: local
+
+deploy:
+  PIPELINES_NAMESPACE: "{{ ci_cd.NAMESPACE }}"
+  NAME: java-app
+
+openshift_cluster_content:
+- object: app-builds
+  content:
+  - name: python-app-build-test
+    template: "{{ playbook_dir }}/openshift-templates/s2i-app-build/template-no-secrets.yml"
+    params: "{{ playbook_dir }}/params/python-app/build"
+    namespace: "{{ ci_cd.NAMESPACE }}"
+    tags:
+    - python-build
+- object: app-deploy-dev
+  content:
+  - name: python-app
+    template: "{{ playbook_dir }}/openshift-templates/automation-api-hsql/template.yml"
+    params_from_vars: "{{ deploy }}"
+    namespace: "{{ dev.NAMESPACE }}"
+    tags:
+    - python-deploy
+    - python-deploy-dev
+  - name: fabric8-rolebinding
+    template: "{{ playbook_dir }}/openshift-templates/fabric8-role-bindings/template.yml"
+    params: "{{ playbook_dir }}/params/python-app/fabric8_dev"
+    namespace: "{{ dev.NAMESPACE }}"
+    tags:
+    - python-deploy
+    - python-deploy-dev
+- object: app-deploy-test
+  content:
+  - name: python-app
+    template: "{{ playbook_dir }}/openshift-templates/automation-api-hsql/template.yml"
+    params_from_vars: "{{ deploy }}"
+    namespace: "{{ test.NAMESPACE }}"
+    tags:
+    - python-deploy
+    - python-deploy-test
+  - name: fabric8-rolebinding
+    template: "{{ playbook_dir }}/openshift-templates/fabric8-role-bindings/template.yml"
+    params: "{{ playbook_dir }}/params/python-app/fabric8_test"
+    namespace: "{{ test.NAMESPACE }}"
+    tags:
+    - python-deploy
+    - python-deploy-test

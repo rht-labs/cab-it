@@ -1,0 +1,17 @@
+ci_cd:
+  NAMESPACE: cab-it-ci-cd
+  NAMESPACE_DISPLAY_NAME: Labs CI/CD
+  
+dev:
+  NAMESPACE: cab-it-dev
+  NAMESPACE_DISPLAY_NAME: Labs Development
+
+test:
+  NAMESPACE: cab-it-test
+  NAMESPACE_DISPLAY_NAME: Labs Test 
+
+role_binding_group:
+  GROUP: "{{ ci_cd.NAMESPACE }}-contributors"
+  ROLE: edit
+
+app:
