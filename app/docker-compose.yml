@@ -1,0 +1,14 @@
+version: '3.6'
+services:
+    app:
+        restart: always
+        build: 
+            context: .
+            dockerfile: Dockerfile-Dev
+        environment:
+            - FLASK_DEBUG=1
+            - FLASK_APP=/app/app
+        ports:
+            - "5000:5000"
+        volumes:
+            - .:/app:z

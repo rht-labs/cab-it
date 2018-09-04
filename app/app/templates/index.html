@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+    <h3>This is part of the child template.</h3>
+    <h4>Looks like you are calling from {{ request.remote_addr }} - welcome!.</h4>
+    The counter is currently at {{ counter }}.
+    <form action="/api/increment_counter" method="POST">
+        Increment by:
+        <input type="number" name="amount" value="1">
+        <button>Go</button>
+    </form>
+    <form action="/api/decrement_counter" method="POST">
+        Decrement by:
+        <input type="number" name="amount" value="1">
+        <button>Go</button>
+    </form>
+{% endblock %}

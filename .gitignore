@@ -6,3 +6,7 @@ ci-cd/*.pyc
 *.iml
 gdsl
 *.retry
+env/
+__pycache__
+.vscode
+.pytest_cache
