@@ -1,7 +1,7 @@
 from flask import Flask, templating, render_template, request
 import api
 
-def create_app():
+def application():
 
     app = Flask(__name__, template_folder='templates/')
 
