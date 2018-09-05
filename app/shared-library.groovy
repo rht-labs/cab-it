@@ -18,6 +18,10 @@ def patchBuildConfigOutputLabels(env) {
                         [ name: 'io.openinnovationlabs.git.branch', value: "${env.GIT_BRANCH}"],
                         [ name: 'io.openinnovationlabs.git.url', value: "${env.GIT_URL}"],
                         [ name: 'io.openinnovationlabs.git.commit', value: "${env.GIT_COMMIT}"]
+                    ],
+                    to : [
+                            kind: 'ImageStreamTag',
+                            name: "${env.APP_NAME}:${JENKINS_TAG}"
                     ]
                 ]
             ] 
