@@ -7,18 +7,15 @@ pipeline {
     environment {
         // Global Vars
         PIPELINES_NAMESPACE = "cab-it-ci-cd"
-        DEV_PROJECT = "cab-it-dev"
-        TEST_PROJECT = "cab-it-test"
+        DEV_NAMESPACE = "cab-it-dev"
+        TEST_NAMESPACE = "cab-it-test"
         APP_NAME = "python-app"
         JENKINS_TAG = "${JOB_NAME}.${BUILD_NUMBER}".replace("/", "-")
-        JOB_NAME = "${JOB_NAME}".replace("/", "-")
         NEXUS_SERVICE_HOST = 'nexus'
         NEXUS_SERVICE_PORT = '8081'
         OCP_API_SERVER = "${OPENSHIFT_API_URL}"
         OCP_TOKEN = readFile('/var/run/secrets/kubernetes.io/serviceaccount/token').trim()
     }
-
-
 
     options {
         buildDiscarder(logRotator(numToKeepStr:'10'))
