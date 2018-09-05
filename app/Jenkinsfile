@@ -55,7 +55,6 @@ pipeline {
         stage("Bake Image") {
             steps {
                 script{
-                    input message: 'Done Debugging?'
                     def helper = load 'app/shared-library.groovy'
                     helper.patchBuildConfigOutputLabels(env)
 
@@ -82,5 +81,30 @@ pipeline {
             }
         }
 
+        stage('Deploy: Test'){
+            agent { label 'jenkins-slave-ansible'}
+            options {
+                timeout(time: 1, unit: 'HOURS')
+            }
+            steps {
+                script {
+                    // slackSend "${env.APP_NAME} Input requested - ${JOB_NAME} ${BUILD_NUMBER} (<${BUILD_URL}|Open>)"
+                    input message: 'Deploy to Test?'
+
+                }
+                script{
+                    def helper = load 'shared-library.groovy'
+                    // helper.applyAnsibleInventory( "${APPLY_PLAYBOOK_NAME}", 'test' )
+                    timeout(10) { // in minutes
+                        helper.promoteImageWithinCluster( "${APP_NAME}", "${DEV_PROJECT}", "${TEST_PROJECT}" )
+                        // the new client is having random failures
+                        helper.verifyDeployment("${APP_NAME}", "${TEST_PROJECT}")
+                    }
+                }
+
+                // slackSend color: "good", message: ":success: ${APP_NAME} Build Completed - ${JOB_NAME} ${BUILD_NUMBER} (<${BUILD_URL}|Open>)"
+
+            }
+        }
     }
 }
