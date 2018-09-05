@@ -98,7 +98,7 @@ pipeline {
                     timeout(10) { // in minutes
                         helper.promoteImageWithinCluster( "${APP_NAME}", "${CI_CD_NAMESPACE}", "${TEST_NAMESPACE}", "${JENKINS_TAG}" )
                         // the new client is having random failures
-                        helper.verifyDeployment("${APP_NAME}", "${TEST_PROJECT}")
+                        helper.verifyDeployment("${APP_NAME}", "${TEST_NAMESPACE}")
                     }
                 }
 
