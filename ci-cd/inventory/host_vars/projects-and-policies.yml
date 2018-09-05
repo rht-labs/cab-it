@@ -8,19 +8,25 @@ openshift_cluster_content:
     action: create
     params_from_vars: "{{ ci_cd }}"
     tags:
+    - ci-cd
     - projects
+    - projects-ci-cd
   - name: dev
     template: "https://raw.githubusercontent.com/redhat-cop/cluster-lifecycle/v3.9.0/files/projectrequest/template.yml"
     action: create
     params_from_vars: "{{ dev }}"
     tags:
+    - dev
     - projects
+    - projects-dev
   - name: test
     template: "https://raw.githubusercontent.com/redhat-cop/cluster-lifecycle/v3.9.0/files/projectrequest/template.yml"
     action: create
     params_from_vars: "{{ test }}"
     tags:
+    - test
     - projects
+    - projects-test
 - object: group-role-binding
   content:
   - name: "ci-cd-acl"
@@ -28,16 +34,22 @@ openshift_cluster_content:
     template: "{{ playbook_dir }}/openshift-templates/rolebinding-group/template.yml"
     params_from_vars: "{{ role_binding_group }}"
     tags:
+    - ci-cd
     - rolebinding-group
+    - rolebinding-group-ci-cd
   - name: "{{ dev.NAMESPACE }}-acl"
     namespace: "{{ dev.NAMESPACE }}"
     template: "{{ playbook_dir }}/openshift-templates/rolebinding-group/template.yml"
     params_from_vars: "{{ role_binding_group }}"
     tags:
+    - dev
     - rolebinding-group
+    - rolebinding-group-dev
   - name: "{{ test.NAMESPACE }}-acl"
     namespace: "{{ test.NAMESPACE }}"
     template: "{{ playbook_dir }}/openshift-templates/rolebinding-group/template.yml"
     params_from_vars: "{{ role_binding_group }}"
     tags:
+    - test
     - rolebinding-group
+    - rolebinding-group-test
