@@ -55,6 +55,7 @@ pipeline {
         stage("Bake Image") {
             steps {
                 script{
+                    input message: 'Done Debugging?'
                     def helper = load 'app/shared-library.groovy'
                     helper.patchBuildConfigOutputLabels(env)
 

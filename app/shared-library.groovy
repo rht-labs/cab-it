@@ -7,7 +7,7 @@ def patchBuildConfigOutputLabels(env) {
 
     // needed because https://github.com/openshift/jenkins/issues/574
     // TODO maybe move to jenkins client? I dunno, that client feels flaky...
-    def jenkinsHost = sh(script: 'oc get route jenkins --template={{.spec.host}}', returnStdout: true)
+    def jenkinsHost = sh(script: 'oc get route jenkins --template={{.spec.host}} -n ${env.CI_CD_NAMESPACE}', returnStdout: true)
 
     def patch = [
             spec: [
