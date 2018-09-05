@@ -53,7 +53,7 @@ def verifyDeployment(String appName, String projectName ){
     echo "Verification complete"
 }
 
-def promoteImageWithinCluster( String appName, String sourceProjectName, String targetProjectName ){
+def promoteImageWithinCluster( String appName, String sourceProjectName, String targetProjectName, String sourceImageTag = 'latest' ){
     openshift.withCluster () {
         try {
             echo "Tagging ${targetProjectName}/${appName}:latest ${targetProjectName}/${appName}:previous"
@@ -61,10 +61,12 @@ def promoteImageWithinCluster( String appName, String sourceProjectName, String 
         } catch (Exception ex) {
             echo 'Failed to tag for previous'
         }
-        echo "Tagging ${sourceProjectName}/${appName}:latest ${targetProjectName}/${appName}:latest"
-        openshift.tag( "${sourceProjectName}/${appName}:latest ${targetProjectName}/${appName}:latest" )
-        echo "Tagging ${sourceProjectName}/${appName}:latest ${targetProjectName}/${appName}:deployed"
-        openshift.tag( "${sourceProjectName}/${appName}:latest ${targetProjectName}/${appName}:deployed" )
+
+        echo "Tagging ${sourceProjectName}/${appName}:${sourceImageTag} ${targetProjectName}/${appName}:latest"
+        openshift.tag( "${sourceProjectName}/${appName}:${sourceImageTag} ${targetProjectName}/${appName}:latest" )
+
+        echo "Tagging ${sourceProjectName}/${appName}:${sourceImageTag} ${targetProjectName}/${appName}:deployed"
+        openshift.tag( "${sourceProjectName}/${appName}:${sourceImageTag} ${targetProjectName}/${appName}:deployed" )
     }
 }
 

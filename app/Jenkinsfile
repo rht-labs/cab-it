@@ -74,7 +74,7 @@ pipeline {
                     // helper.applyAnsibleInventory( "${APPLY_PLAYBOOK_NAME}", 'dev' ) get rid of apply_playbook_name or default it
                     timeout(5) { // in minutes
                         openshift.loglevel(3)
-                        helper.promoteImageWithinCluster( "${APP_NAME}", "${CI_CD_NAMESPACE}", "${DEV_NAMESPACE}" )
+                        helper.promoteImageWithinCluster( "${APP_NAME}", "${CI_CD_NAMESPACE}", "${DEV_NAMESPACE}, ${JENKINS_TAG}" )
                         helper.verifyDeployment("${APP_NAME}", "${DEV_NAMESPACE}")
                     }
                 }
@@ -96,7 +96,7 @@ pipeline {
                     def helper = load 'shared-library.groovy'
                     // helper.applyAnsibleInventory( "${APPLY_PLAYBOOK_NAME}", 'test' )
                     timeout(10) { // in minutes
-                        helper.promoteImageWithinCluster( "${APP_NAME}", "${DEV_PROJECT}", "${TEST_PROJECT}" )
+                        helper.promoteImageWithinCluster( "${APP_NAME}", "${DEV_PROJECT}", "${TEST_PROJECT}, ${JENKINS_TAG}" )
                         // the new client is having random failures
                         helper.verifyDeployment("${APP_NAME}", "${TEST_PROJECT}")
                     }
