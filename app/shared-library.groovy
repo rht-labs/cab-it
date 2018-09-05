@@ -25,7 +25,7 @@ def patchBuildConfigOutputLabels(env) {
     def patchJson = JsonOutput.toJson(patch)
 
     // TODO maybe move to jenkins client? I dunno, that client feels flaky...
-    sh "oc patch bc ${APP_NAME} -p '${patchJson}'"
+    sh "oc patch bc ${APP_NAME} -p '${patchJson}' -n ${env.CI_CD_NAMESPACE}"
 }
 
 /*
