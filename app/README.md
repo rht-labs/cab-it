@@ -2,6 +2,8 @@
 
 This is a simple counter API built as a demo of a minimal Flask app. It simply uses application context for storing the counter. __Do not do that in production__.
 
+## Common Commands
+
 You should be able to develop using `docker-compose up`, with live reloading thanks to Flask's debug mode. The app will be available on http://localhost:5000
 
 It is recommended to have virtualenv running in another terminal for the purpose of isolating dependencies and running tests. If you don't have the virtualenv tool installed, pip can install it with `python3 -m pip install --user virtualenv`. Then, `python3 -m virtualenv env && source env/bin/activate && pip3 install -r requirements.txt` should initialize virtualenv for first use.
@@ -10,4 +12,6 @@ You can exit the virtualenv at any time with `deactivate`, and reenter it later 
 
 If you modify any dependencies inside of the virtualenv and need to create a new `requirements.txt` file, use `pip3 freeze >>> requirements.txt`.
 
-To test, run `pytest` or `pytest -v` in your virtualenv.
+To test, run `pytest` or `pytest -v` from the `app/` in your virtualenv.
+
+The test / production servers can be started with `flask run` or `gunicorn --bind 0.0.0.0 app.wsgi:app` respectively, both from the `app/` directory in the virtualenv.
