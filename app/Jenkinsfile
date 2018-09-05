@@ -25,6 +25,7 @@ pipeline {
     }
 
     stages {
+/* to be added back later when testing is working
         stage("test and build") {
             agent {
                 node {
@@ -42,6 +43,7 @@ pipeline {
                 '''
             }
         }
+*/
         stage("bake image") {
             agent {
                 node {
