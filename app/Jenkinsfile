@@ -6,15 +6,23 @@ pipeline {
 
     environment {
         // Global Vars
-        PIPELINES_NAMESPACE = "cab-it-ci-cd"
+        CI_CD_NAMESPACE = "cab-it-ci-cd"
         DEV_NAMESPACE = "cab-it-dev"
         TEST_NAMESPACE = "cab-it-test"
+
         APP_NAME = "python-app"
+        APPLY_PLAYBOOK_NAME = "apply.yml"
+        SOURCE_CONTEXT_DIR = "" // probably not needed
+
         JENKINS_TAG = "${JOB_NAME}.${BUILD_NUMBER}".replace("/", "-")
+
         NEXUS_SERVICE_HOST = 'nexus'
         NEXUS_SERVICE_PORT = '8081'
+
         OCP_API_SERVER = "${OPENSHIFT_API_URL}"
         OCP_TOKEN = readFile('/var/run/secrets/kubernetes.io/serviceaccount/token').trim()
+
+
     }
 
     options {
@@ -26,7 +34,7 @@ pipeline {
 
     stages {
 /* to be added back later when testing is working
-        stage("test and build") {
+        stage("Test and Build") {
             agent {
                 node {
                     label "jenkins-slave-python"  
@@ -44,51 +52,34 @@ pipeline {
             }
         }
 */
-        stage("bake image") {
-            agent {
-                node {
-                    label "master"  
-                }
-            }
+        stage("Bake Image") {
             steps {
-                echo '### Create Linux Container Image from source ###'
-                sh  '''
-                        oc patch bc ${APP_NAME} -p "{\\"spec\\":{\\"output\\":{\\"to\\":{\\"kind\\":\\"ImageStreamTag\\",\\"name\\":\\"${APP_NAME}:${JENKINS_TAG}\\"}}}}"
-                        oc start-build ${APP_NAME} -w -n ${PIPELINES_NAMESPACE}
-                    '''
-            }
-            post {
-                always {
-                    archive "**"
+                script{
+                    def helper = load 'shared-library.groovy'
+                    helper.patchBuildConfigOutputLabels(env)
+
+                    openshift.withCluster () {
+                        def buildSelector = openshift.startBuild( "${APP_NAME}" )
+                        buildSelector.logs('-f')
+                    }
                 }
             }
         }
-        stage("deploy") {
-            agent {
-                node {
-                    label "master"  
+ 
+        stage('Deploy: Dev'){
+            agent { label 'jenkins-slave-ansible'}
+            steps {
+                script{
+                    def helper = load 'shared-library.groovy'
+                    // helper.applyAnsibleInventory( "${APPLY_PLAYBOOK_NAME}", 'dev' ) get rid of apply_playbook_name or default it
+                    timeout(5) { // in minutes
+                        openshift.loglevel(3)
+                        helper.promoteImageWithinCluster( "${APP_NAME}", "${CI_CD_NAMESPACE}", "${DEV_NAMESPACE}" )
+                        helper.verifyDeployment("${APP_NAME}", "${DEV_NAMESPACE}")
+                    }
                 }
             }
-            steps {
-                echo '### tag image for namespace ###'
-                sh  '''
-                    oc tag ${PIPELINES_NAMESPACE}/${APP_NAME}:${JENKINS_TAG} ${DEV_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}
-                    '''
-                echo '### set env vars and image for deployment ###'
-                sh '''
-                    oc project ${DEV_NAMESPACE}
-                    oc set image dc/${APP_NAME} ${APP_NAME}=docker-registry.default.svc:5000/${DEV_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}
-                    oc rollout latest dc/${APP_NAME}
-                '''
-                echo '### Verify OCP Deployment ###'
-                openshiftVerifyDeployment depCfg: env.APP_NAME, 
-                    namespace: env.DEV_NAMESPACE, 
-                    replicaCount: '1', 
-                    verbose: 'false', 
-                    verifyReplicaCount: 'true', 
-                    waitTime: '',
-                    waitUnit: 'sec'
-            }
         }
+
     }
 }
