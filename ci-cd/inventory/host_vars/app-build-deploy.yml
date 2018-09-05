@@ -16,7 +16,7 @@ openshift_cluster_content:
 - object: app-builds
   content:
   - name: python-app-build-test
-    template: "{{ playbook_dir }}/openshift-templates/s2i-app-build/template-no-secrets.yml"
+    template: "{{ playbook_dir }}/openshift-templates/s2i-app-build/source-template-no-secrets.yml"
     params: "{{ playbook_dir }}/params/python-app/build"
     namespace: "{{ ci_cd.NAMESPACE }}"
     tags:

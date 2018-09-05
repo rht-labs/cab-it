@@ -3,3 +3,6 @@ PIPELINE_SOURCE_REPOSITORY_REF=master
 PIPELINE_CONTEXT_DIR=app
 NAME=python-app
 S2I_BASE_IMAGE=python:3.6
+GIT_SOURCE_CONTEXT_DIR=app/app
+GIT_SOURCE_REF=s2i
+GIT_SOURCE_URI=https://github.com/rht-labs/cab-it.git

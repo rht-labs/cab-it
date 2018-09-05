@@ -14,9 +14,6 @@ pipeline {
         JOB_NAME = "${JOB_NAME}".replace("/", "-")
         NEXUS_SERVICE_HOST = 'nexus'
         NEXUS_SERVICE_PORT = '8081'
-        SOURCE_CONTEXT_DIR = ""
-        BUILD_OUTPUT_CONTEXT_DIR = "dist/"
-        APP_NAME = "vue-booster"
         OCP_API_SERVER = "${OPENSHIFT_API_URL}"
         OCP_TOKEN = readFile('/var/run/secrets/kubernetes.io/serviceaccount/token').trim()
     }
@@ -39,16 +36,16 @@ pipeline {
             }
             steps {
                 sh '''
-                    pwd
-                    ls -al
-                    python --version
+                    //pwd
+                    //ls -al
+                    //python --version
                     cd app/
                     python -m virtualenv env
                     source env/bin/activate
                     pip install -r requirements.txt
                     pytest --junitxml=test-report.xml
-                    zip -r package-contents.zip .
-                    curl -vvv -u admin:admin123 --upload-file package-contents.zip http://${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/repository/zip/com/redhat/${APP_NAME}/${JOB_NAME}.${BUILD_NUMBER}/package-contents.zip
+                    //zip -r package-contents.zip .
+                    //curl -vvv -u admin:admin123 --upload-file package-contents.zip http://${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/repository/zip/com/redhat/${APP_NAME}/${JOB_NAME}.${BUILD_NUMBER}/package-contents.zip
                 '''
             }
             post {
@@ -73,21 +70,11 @@ pipeline {
                     label "master"  
                 }
             }
-            when {
-                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
-            }
             steps {
-                echo '### Get Binary from Nexus ###'
+                echo '### Create Linux Container Image from source ###'
                 sh  '''
-                        rm -rf package-contents*
-                        curl -v -f http://admin:admin123@${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/repository/zip/com/redhat/${APP_NAME}/${JENKINS_TAG}/package-contents.zip -o package-contents.zip
-                        unzip package-contents.zip
-                    '''
-                echo '### Create Linux Container Image from package ###'
-                sh  '''
-                        oc project ${PIPELINES_NAMESPACE} # probs not needed
                         oc patch bc ${APP_NAME} -p "{\\"spec\\":{\\"output\\":{\\"to\\":{\\"kind\\":\\"ImageStreamTag\\",\\"name\\":\\"${APP_NAME}:${JENKINS_TAG}\\"}}}}"
-                        oc start-build ${APP_NAME} --w
+                        oc start-build ${APP_NAME} --w -n ${PIPELINES_NAMESPACE}
                     '''
             }
             post {
@@ -105,7 +92,6 @@ pipeline {
             steps {
                 echo '### tag image for namespace ###'
                 sh  '''
-                    oc project ${DEV_NAMESPACE}
                     oc tag ${PIPELINES_NAMESPACE}/${APP_NAME}:${JENKINS_TAG} ${DEV_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}
                     '''
                 echo '### set env vars and image for deployment ###'
