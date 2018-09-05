@@ -12,6 +12,7 @@ pipeline {
 
         APP_NAME = "python-app"
         APPLY_PLAYBOOK_NAME = "apply.yml"
+        APPLIER_TARGET = "apps"
         SOURCE_CONTEXT_DIR = "" // probably not needed
 
         JENKINS_TAG = "${JOB_NAME}.${BUILD_NUMBER}".replace("/", "-")
@@ -71,7 +72,7 @@ pipeline {
             steps {
                 script{
                     def helper = load 'app/shared-library.groovy'
-                    // helper.applyAnsibleInventory( "${APPLY_PLAYBOOK_NAME}", 'dev' ) get rid of apply_playbook_name or default it
+                    helper.applyAnsibleInventory( "${APPLIER_TARGET}", 'python-deploy-dev' )
                     timeout(5) { // in minutes
                         openshift.loglevel(3)
                         helper.promoteImageWithinCluster( "${APP_NAME}", "${CI_CD_NAMESPACE}", "${DEV_NAMESPACE}", "${JENKINS_TAG}" )
@@ -94,7 +95,7 @@ pipeline {
                 }
                 script{
                     def helper = load 'app/shared-library.groovy'
-                    // helper.applyAnsibleInventory( "${APPLY_PLAYBOOK_NAME}", 'test' )
+                    helper.applyAnsibleInventory( "${APPLIER_TARGET}", 'python-deploy-test' )
                     timeout(10) { // in minutes
                         helper.promoteImageWithinCluster( "${APP_NAME}", "${CI_CD_NAMESPACE}", "${TEST_NAMESPACE}", "${JENKINS_TAG}" )
                         // the new client is having random failures
