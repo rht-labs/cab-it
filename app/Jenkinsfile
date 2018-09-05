@@ -55,7 +55,7 @@ pipeline {
         stage("Bake Image") {
             steps {
                 script{
-                    def helper = load 'shared-library.groovy'
+                    def helper = load 'app/shared-library.groovy'
                     helper.patchBuildConfigOutputLabels(env)
 
                     openshift.withCluster () {
@@ -70,7 +70,7 @@ pipeline {
             agent { label 'jenkins-slave-ansible'}
             steps {
                 script{
-                    def helper = load 'shared-library.groovy'
+                    def helper = load 'app/shared-library.groovy'
                     // helper.applyAnsibleInventory( "${APPLY_PLAYBOOK_NAME}", 'dev' ) get rid of apply_playbook_name or default it
                     timeout(5) { // in minutes
                         openshift.loglevel(3)
