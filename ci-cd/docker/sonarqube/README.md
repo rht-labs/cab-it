@@ -12,7 +12,7 @@ but it has been modified to allow permissions to be run in an OpenShift environm
 
 ### Database
 
-By default, SonarQube will use H2 embedded, which is only for demo usage. To use a proper database, set `JDBC_USER`, `JDBC_PASSWORD` and `JDBC_URL` per [the docs](https://docs.sonarqube.org/display/SONAR/Installing+the+Server#InstallingtheServer-installingDatabaseInstallingtheDatabase).
+By default, SonarQube will use H2 embedded, which is only for test usage. To use a proper database, set `JDBC_USER`, `JDBC_PASSWORD` and `JDBC_URL` per [the docs](https://docs.sonarqube.org/display/SONAR/Installing+the+Server#InstallingtheServer-installingDatabaseInstallingtheDatabase).
 
 
 ### Plugin Installation

@@ -129,7 +129,7 @@ Note:
   - This playbook works (in part) by changing the contents of the files in `params`. The playbook is idempotent, so it will only change these files once, but you should expect changes.
   - Only numbers, lowercase letters, and dashes are allowed in project names.
 
-After running the playbook, the pipeline should execute in Jenkins, build the spring boot app, deploy artifacts to nexus, deploy the container to the dev stage and then wait approval to deploy to the demo stage. See Common Issues
+After running the playbook, the pipeline should execute in Jenkins, build the spring boot app, deploy artifacts to nexus, deploy the container to the dev stage and then wait approval to deploy to the test stage. See Common Issues
 
 ## Running a Subset of the Inventory
 
