@@ -76,6 +76,7 @@ pipeline {
                     '''
                 echo '### set env vars and image for deployment ###'
                 sh '''
+                    oc project ${DEV_NAMESPACE}
                     oc set image dc/${APP_NAME} ${APP_NAME}=docker-registry.default.svc:5000/${DEV_NAMESPACE}/${APP_NAME}:${JENKINS_TAG}
                     oc rollout latest dc/${APP_NAME}
                 '''
