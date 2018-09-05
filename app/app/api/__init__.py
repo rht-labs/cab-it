@@ -3,7 +3,7 @@ from flask import templating, render_template, request, Blueprint, current_app
 api = Blueprint("api", __name__)
 
 ################################################################################
-# Storing something like a counter is really a job for redis or something 
+# Storing something like a counter is really a job for redis or something
 # like that - but I didn't want to introduce extra dependencies in this example.
 # Don't use application context for real storage!
 ################################################################################
