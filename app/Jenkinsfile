@@ -55,7 +55,7 @@ pipeline {
                 echo '### Create Linux Container Image from source ###'
                 sh  '''
                         oc patch bc ${APP_NAME} -p "{\\"spec\\":{\\"output\\":{\\"to\\":{\\"kind\\":\\"ImageStreamTag\\",\\"name\\":\\"${APP_NAME}:${JENKINS_TAG}\\"}}}}"
-                        oc start-build ${APP_NAME} --w -n ${PIPELINES_NAMESPACE}
+                        oc start-build ${APP_NAME} -w -n ${PIPELINES_NAMESPACE}
                     '''
             }
             post {
