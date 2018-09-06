@@ -71,7 +71,6 @@ pipeline {
             agent { label 'jenkins-slave-ansible'}
             steps {
                 script{
-                    input message: 'Deploy to Dev?'
                     def helper = load 'app/shared-library.groovy'
                     helper.applyAnsibleInventory( "${APPLIER_TARGET}", 'python-deploy-dev' )
                     timeout(5) { // in minutes
