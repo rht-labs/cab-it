@@ -48,7 +48,7 @@ objects:
           ports:
           - containerPort: 8778
             protocol: TCP
-          - containerPort: 5000
+          - containerPort: 8080
             protocol: TCP
           - containerPort: 8443
             protocol: TCP
@@ -77,10 +77,10 @@ objects:
     name: "${NAME}"
   spec:
     ports:
-    - name: 5000-tcp
-      port: 5000
+    - name: 8080-tcp
+      port: 8080
       protocol: TCP
-      targetPort: 5000
+      targetPort: 8080
     - name: 8443-tcp
       port: 8443
       protocol: TCP
@@ -101,7 +101,7 @@ objects:
     name: "${NAME}"
   spec:
     port:
-      targetPort: 5000-tcp
+      targetPort: 8080-tcp
     to:
       kind: Service
       name: "${NAME}"
