@@ -3,3 +3,4 @@ SOURCE_CONTEXT_DIR=jenkins-slaves/jenkins-slave-python
 BUILDER_IMAGE_NAME=registry.access.redhat.com/openshift3/jenkins-slave-base-rhel7:latest
 NAME=jenkins-slave-python
 SOURCE_REPOSITORY_REF=master
+SLAVE_IMAGE_TAG=v3.10
