@@ -2,14 +2,7 @@
 ---
 ansible_connection: local
 
-fabric8_dev:
-  APP_NAMESPACE: "{{ dev.NAMESPACE }}"
-
-fabric8_test:
-  APP_NAMESPACE: "{{ test.NAMESPACE }}"
-
 deploy:
-  PIPELINES_NAMESPACE: "{{ ci_cd.NAMESPACE }}"
   NAME: python-app
 
 openshift_cluster_content:
@@ -32,27 +25,11 @@ openshift_cluster_content:
     tags:
     - python-deploy
     - python-deploy-dev
-  - name: fabric8-rolebinding
-    template: "{{ playbook_dir }}/openshift-templates/fabric8-role-bindings/template.yml"
-    params_from_vars: "{{ fabric8_dev }}"
-    namespace: "{{ dev.NAMESPACE }}"
-    ignore_unknown_parameters: false
-    tags:
-    - python-deploy
-    - python-deploy-dev
 - object: app-deploy-test
   content:
   - name: python-app
     template: "{{ playbook_dir }}/openshift-templates/http-app-deploy/template.yml"
     params_from_vars: "{{ deploy }}"
-    namespace: "{{ test.NAMESPACE }}"
-    ignore_unknown_parameters: false
-    tags:
-    - python-deploy
-    - python-deploy-test
-  - name: fabric8-rolebinding
-    template: "{{ playbook_dir }}/openshift-templates/fabric8-role-bindings/template.yml"
-    params_from_vars: "{{ fabric8_test }}"
     namespace: "{{ test.NAMESPACE }}"
     ignore_unknown_parameters: false
     tags:
