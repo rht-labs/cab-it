@@ -19,6 +19,7 @@ openshift_cluster_content:
     template: "{{ playbook_dir }}/openshift-templates/s2i-app-build/source-template-no-secrets.yml"
     params: "{{ playbook_dir }}/params/python-app/build"
     namespace: "{{ ci_cd.NAMESPACE }}"
+    ignore_unknown_parameters: false
     tags:
     - python-build
 - object: app-deploy-dev
@@ -27,6 +28,7 @@ openshift_cluster_content:
     template: "{{ playbook_dir }}/openshift-templates/http-app-deploy/template.yml"
     params_from_vars: "{{ deploy }}"
     namespace: "{{ dev.NAMESPACE }}"
+    ignore_unknown_parameters: false
     tags:
     - python-deploy
     - python-deploy-dev
@@ -34,6 +36,7 @@ openshift_cluster_content:
     template: "{{ playbook_dir }}/openshift-templates/fabric8-role-bindings/template.yml"
     params_from_vars: "{{ fabric8_dev }}"
     namespace: "{{ dev.NAMESPACE }}"
+    ignore_unknown_parameters: false
     tags:
     - python-deploy
     - python-deploy-dev
@@ -43,6 +46,7 @@ openshift_cluster_content:
     template: "{{ playbook_dir }}/openshift-templates/http-app-deploy/template.yml"
     params_from_vars: "{{ deploy }}"
     namespace: "{{ test.NAMESPACE }}"
+    ignore_unknown_parameters: false
     tags:
     - python-deploy
     - python-deploy-test
@@ -50,6 +54,7 @@ openshift_cluster_content:
     template: "{{ playbook_dir }}/openshift-templates/fabric8-role-bindings/template.yml"
     params_from_vars: "{{ fabric8_test }}"
     namespace: "{{ test.NAMESPACE }}"
+    ignore_unknown_parameters: false
     tags:
     - python-deploy
     - python-deploy-test
