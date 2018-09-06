@@ -6,11 +6,8 @@ COPY . /app
 
 WORKDIR /app
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r app/requirements.txt
 
-ENV FLASK_APP=/app/app
-ENV FLASK_DEBUG=0
-
-CMD ["flask", "run", "--host=0.0.0.0"]
+CMD ["gunicorn", "--bind=0.0.0.0:5000", "app.wsgi:app"]
 
 EXPOSE 5000
