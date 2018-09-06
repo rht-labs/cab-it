@@ -11,3 +11,7 @@ __pycache__
 .vscode
 .pytest_cache
 test-report.xml
+app/build
+app/dist
+app/.eggs
+app/app.egg-info
