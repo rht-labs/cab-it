@@ -3,4 +3,3 @@ BUILDER_IMAGE_NAME=centos:centos7
 NAME=jenkins-slave-zap
 SOURCE_REPOSITORY_REF=master
 DOCKERFILE_PATH=Dockerfile
-SLAVE_IMAGE_TAG=v3.10
