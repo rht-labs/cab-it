@@ -1,0 +1,110 @@
+swagger: "2.0"
+
+info:
+  title: "{{title}}"
+  version: "1.0"
+  description: How to Count
+  contact:
+    name: patrick patrick
+    url: http://patrick.com
+    email: patrick@patrick.com
+  license:
+    name: GNU GPLv3
+    url: https://www.gnu.org/licenses/gpl.txt
+
+basePath: "/api"
+
+paths:
+  /counter:
+    get:
+      operationId: app.api.get_counter
+      description: Get the Count
+      produces:
+        - text/plain;
+      responses:
+        200:
+          description: Here's the Count
+          schema:
+            type: string
+          examples:
+            "text/plain": "1"
+  /decrement_counter:
+    post:
+      operationId: app.api.decrement_counter_post
+      description: Decrease the Counter by 1
+      produces:
+        - text/plain;
+      responses:
+        200:
+          description: Here's the new Count
+          schema:
+            type: string
+          examples:
+            "text/plain": "1"
+  /increment_counter:
+    post:
+      operationId: app.api.increment_counter_post
+      produces:
+        - text/plain;
+      responses:
+        200:
+          description: Here's the new Count
+          schema:
+            type: string
+          examples:
+            "text/plain": "1"
+  /increment_counter/{amount}:
+    get:
+      operationId: app.api.increment_counter_get
+      produces:
+        - text/plain;
+      responses:
+        200:
+          description: Here's the new Count
+          schema:
+            type: string
+          examples:
+            "text/plain": "1"
+    parameters:
+    - name: amount
+      in: path
+      required: true
+      description: "The Amount you would like to increment by"
+      type: integer
+  /decrement_counter/{amount}:
+    get:
+      operationId: app.api.decrement_counter_get
+      produces:
+        - text/plain;
+      responses:
+        200:
+          description: Here's the new Count
+          schema:
+            type: string
+          examples:
+            "text/plain": "1"
+    parameters:
+    - name: amount
+      in: path
+      required: true
+      type: integer
+  /set_counter/{value}:
+    get:
+      summary: Set Counter
+      description: Set the Counter to a specific value
+      operationId: app.api.set_counter
+      produces:
+        - text/plain;
+      responses:
+        200:
+          description: Here's the new Count
+          schema:
+            type: string
+          examples:
+            "text/plain": "1"
+    parameters:
+    - name: value
+      in: path
+      description: value you'd like to set counter to
+      required: true
+      type: integer

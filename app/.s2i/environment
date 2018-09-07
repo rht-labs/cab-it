@@ -1,1 +1,1 @@
-APP_MODULE=app.wsgi:app
+APP_MODULE=app.wsgi:flask_app

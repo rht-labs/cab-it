@@ -27,17 +27,13 @@ def test_decrement_get(client, app):
 
 def test_increment_post(client, app):
     client.get('/api/set_counter/1')
-    client.post('/api/increment_counter', data=dict(
-        amount=5
-    ))
+    client.post('/api/increment_counter')
     currentState = client.get('/api/counter')
-    assert b'6' == currentState.data
+    assert b'2' == currentState.data
 
 
 def test_decrement_post(client, app):
     client.get('/api/set_counter/5')
-    client.post('/api/decrement_counter', data=dict(
-        amount=1
-    ))
+    client.post('/api/decrement_counter')
     currentState = client.get('/api/counter')
     assert b'4' == currentState.data
