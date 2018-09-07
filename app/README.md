@@ -14,4 +14,4 @@ If you modify any dependencies inside of the virtualenv and need to create a new
 
 To test, run `pytest` or `pytest -v` from the `app/` in your virtualenv.
 
-The test / production servers can be started with `flask run` or `gunicorn app.wsgi:app` respectively, both from the `app/` directory in the virtualenv.
+The test / production servers can be started with `flask run` or `gunicorn app.wsgi:flask_app` respectively, both from the `app/` directory in the virtualenv.
