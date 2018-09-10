@@ -10,7 +10,7 @@ pipeline {
         DEV_NAMESPACE = "cab-it-applier-dev"
         TEST_NAMESPACE = "cab-it-applier-test"
 
-        APP_NAME = "python-app"
+        APP_NAME = "cab-it"
         APPLY_PLAYBOOK_NAME = "apply.yml"
         APPLIER_TARGET = "apps"
         SOURCE_CONTEXT_DIR = "" // probably not needed
