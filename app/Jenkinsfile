@@ -7,8 +7,8 @@ pipeline {
     environment {
         // Global Vars
         CI_CD_NAMESPACE = "cab-it-ci-cd"
-        DEV_NAMESPACE = "cab-it-dev"
-        TEST_NAMESPACE = "cab-it-test"
+        DEV_NAMESPACE = "cab-it-applier-dev"
+        TEST_NAMESPACE = "cab-it-applier-test"
 
         APP_NAME = "python-app"
         APPLY_PLAYBOOK_NAME = "apply.yml"

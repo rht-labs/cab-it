@@ -1,0 +1,28 @@
+---
+openshift_cluster_content:
+- object: app-builds
+  content:
+  - name: cab-it-build
+    template: "{{ playbook_dir }}/templates/cab-it-build.yml"
+    params: "{{ playbook_dir }}/params/build"
+    namespace: "{{ ci_cd_namespace }}"
+    tags:
+    - build
+- object: deploy-dev
+  content:
+  - name:  cab-it
+    template: "{{ playbook_dir }}/templates/cab-it-deploy.yml"
+    params: "{{ playbook_dir }}/params/dev"
+    namespace: "{{ dev_namespace }}"
+    tags:
+    - deploy
+    - dev
+- object: deploy-test
+  content:
+  - name:  cab-it
+    template: "{{ playbook_dir }}/templates/cab-it-deploy.yml"
+    params: "{{ playbook_dir }}/params/test"
+    namespace: "{{ test_namespace }}"
+    tags:
+    - deploy
+    - test

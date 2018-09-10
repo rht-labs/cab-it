@@ -1,0 +1,10 @@
+---
+- name: Build and Deploy cab-it
+  hosts: app
+  vars:
+    ci_cd_namespace: cab-it-ci-cd
+    dev_namespace: cab-it-applier-dev
+    test_namespace: cab-it-applier-test
+  tasks:
+    - include_role:
+        name: openshift-applier/roles/openshift-applier
