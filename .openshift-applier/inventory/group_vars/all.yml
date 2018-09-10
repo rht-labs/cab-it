@@ -26,3 +26,11 @@ openshift_cluster_content:
     tags:
     - deploy
     - test
+- object: cab-it-pipeline
+  content:
+  - name: cab-it-pipeline
+    template: "{{ playbook_dir }}/templates/ocp-pipeline.yml"
+    params: "{{ playbook_dir }}/params/ocp-pipeline"
+    namespace: "{{ ci_cd_namespace }}"
+    tags:
+    - pipeline

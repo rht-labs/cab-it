@@ -2,4 +2,4 @@ PIPELINES_NAMESPACE=cab-it-ci-cd
 NAME=cab-it
 DEPLOYER_USER=jenkins
 APP_TAG=latest
-NAMESPACE=cab-it-dev
+NAMESPACE=cab-it-applier-dev
