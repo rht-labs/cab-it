@@ -50,7 +50,7 @@ if ( !repository.repositoryManager.exists( 'pypi-proxy' ) ) {
 };
 
 if ( !repository.repositoryManager.exists( 'pypi-all' ) ) {
-    repository.createPyPiGroup('pypi-all',['pyp-internal','pypi-proxy'])
+    repository.createPyPiGroup('pypi-all',['pypi-internal','pypi-proxy'])
 };
 
 if ( !repository.repositoryManager.exists( 'mulesoft-release' ) ){
